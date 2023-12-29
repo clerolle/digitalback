@@ -19,6 +19,5 @@ COPY ./ ./
 
 EXPOSE 8010
 
-CMD python manage.py runserver 
 ENTRYPOINT ["python", "manage.py"]
 CMD ["runserver", "0.0.0.0:8010"]
