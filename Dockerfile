@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY ./requirements.txt ./
 
-RUN python -m pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 COPY ./ ./
 
