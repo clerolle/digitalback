@@ -13,10 +13,12 @@ RUN  apk update \
 
 COPY ./requirements.txt ./
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./ ./
 
 EXPOSE 8010
 
-CMD python manage.py runserver
+CMD python manage.py runserver 
+ENTRYPOINT ["python", "manage.py"]
+CMD ["runserver", "0.0.0.0:8010"]
