@@ -1,23 +1,27 @@
-FROM python:3.10.4-alpine3.15
+# Base image
+FROM python:3.11.0
 
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1 
+ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /app
+# Set the working directory in the container
+WORKDIR /code
 
-WORKDIR /app
+# Copy the requirements file to the working directory
+COPY requirements.txt /code/
 
-RUN  apk update \
-	&& apk add --no-cache gcc musl-dev postgresql-dev python3-dev libffi-dev \
-	&& pip install --upgrade pip 
+# Install project dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY ./requirements.txt ./
+# Copy the project code to the working directory
+COPY . /code/
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Run migrations
+RUN python manage.py migrate
 
-COPY ./ ./
+# Expose port 8000 for the Django development server
+EXPOSE 8000
 
-EXPOSE 8010
-
-ENTRYPOINT ["python", "manage.py"]
-CMD ["runserver", "0.0.0.0:8010"]
+# Start the Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
